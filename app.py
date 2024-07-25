@@ -145,8 +145,10 @@ if submit_button:
     user_input_processed = preprocess_input(user_input)
     try:
         prediction = model.predict(user_input_processed)
+        # Mengubah hasil prediksi menjadi 'Yes' atau 'No'
+        prediction_label = 'Yes' if prediction[0] == 1 else 'No'
         with st.container():
-            st.write(f'*Prediction:* {prediction[0]}', unsafe_allow_html=True)
+            st.write(f'*Prediction:* {prediction_label}', unsafe_allow_html=True)
     except ValueError as e:
         st.error(f"Error in prediction: {e}")
 
