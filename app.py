@@ -108,7 +108,7 @@ st.title("Prediksi Output Customer Online Food")
 
 st.markdown("""
     <div class="centered-text">
-        <h3>Web ini akan memunculkan berapa kali seorang customer membeli Online Food</h3>
+        <h3>Web ini akan menentukan apakah seorang pelanggan akan membeli makanan secara online atau tidak</h3>
     </div>
 """, unsafe_allow_html=True)
 
