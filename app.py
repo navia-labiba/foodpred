@@ -124,7 +124,7 @@ with st.form(key='input_form'):
     latitude = st.number_input('Latitude', format="%f", help="Masukkan koordinat latitude")
     longitude = st.number_input('Longitude', format="%f", help="Masukkan koordinat longitude")
     pin_code = st.number_input('Pin code', min_value=100000, max_value=999999, help="Masukkan kode pos Anda")
-    feedback = st.text_input('Feedback', '', help="Berikan umpan balik Anda")
+    feedback = st.selectbox('Feedback', ['Negative', 'Positive'], help="Pilih umpan balik Anda")
 
     submit_button = st.form_submit_button(label='Predict')
 
