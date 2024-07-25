@@ -47,32 +47,58 @@ def preprocess_input(user_input):
 st.markdown("""
     <style>
     .main {
-        background-color: #87CEEB;
+        background-color: #F0F8FF;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     }
     h1 {
-        color: #4b4b4b;
+        color: #4B0082;
         text-align: center;
-        margin-bottom: 12px;
+        margin-bottom: 20px;
     }
     h3 {
-        color: #4b4b4b;
+        color: #4B0082;
+        text-align: center;
+        margin-bottom: 20px;
     }
     .stButton>button {
-        background-color: #4b4b4b;
-        color: black;
-        padding: 10px 24px;
+        background-color: #4B0082;
+        color: white;
+        padding: 12px 24px;
         border: none;
-        border-radius: 4px;
+        border-radius: 6px;
         cursor: pointer;
+        font-size: 16px;
     }
     .stButton>button:hover {
-        background-color: #4b4b4b;
+        background-color: #6A0DAD;
     }
     .stNumberInput, .stSelectbox {
         margin-bottom: 20px;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #D3D3D3;
+        width: 100%;
+    }
+    .stTextInput {
+        margin-bottom: 20px;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #D3D3D3;
+        width: 100%;
     }
     .centered-text {
         text-align: center;
+        margin-bottom: 20px;
+    }
+    .prediction-container {
+        background-color: #FFF;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-top: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -81,48 +107,46 @@ st.markdown("""
 st.title("Prediksi Output Customer Online Food")
 
 st.markdown("""
-    <style>
-    .main {
-        background-color: #FFC9DE;
-    }
-    </style>
     <div class="centered-text">
-    <h3>Web ini akan memunculkan berapa kali seorang customer membeli Online Food</h3>
+        <h3>Web ini akan memunculkan berapa kali seorang customer membeli Online Food</h3>
     </div>
 """, unsafe_allow_html=True)
 
 # Input pengguna
-age = st.number_input('Age', min_value=18, max_value=100)
-gender = st.selectbox('Gender', ['Male', 'Female'])
-marital_status = st.selectbox('Marital Status', ['Single', 'Married'])
-occupation = st.selectbox('Occupation', ['Student', 'Employee', 'Self Employed'])
-monthly_income = st.selectbox('Monthly Income', ['No Income', 'Below Rs.10000', '10001 to 25000', '25001 to 50000', 'More than 50000'])
-educational_qualifications = st.selectbox('Educational Qualifications', ['Under Graduate', 'Graduate', 'Post Graduate'])
-family_size = st.number_input('Family size', min_value=1, max_value=20)
-latitude = st.number_input('Latitude', format="%f")
-longitude = st.number_input('Longitude', format="%f")
-pin_code = st.number_input('Pin code', min_value=100000, max_value=999999)
-feedback = st.text_input('Feedback', '')
+with st.form(key='input_form'):
+    age = st.number_input('Age', min_value=18, max_value=100, help="Masukkan usia Anda")
+    gender = st.selectbox('Gender', ['Male', 'Female'], help="Pilih jenis kelamin Anda")
+    marital_status = st.selectbox('Marital Status', ['Single', 'Married'], help="Pilih status perkawinan Anda")
+    occupation = st.selectbox('Occupation', ['Student', 'Employee', 'Self Employed'], help="Pilih pekerjaan Anda")
+    monthly_income = st.selectbox('Monthly Income', ['No Income', 'Below Rs.10000', '10001 to 25000', '25001 to 50000', 'More than 50000'], help="Pilih pendapatan bulanan Anda")
+    educational_qualifications = st.selectbox('Educational Qualifications', ['Under Graduate', 'Graduate', 'Post Graduate'], help="Pilih tingkat pendidikan Anda")
+    family_size = st.number_input('Family size', min_value=1, max_value=20, help="Masukkan jumlah anggota keluarga Anda")
+    latitude = st.number_input('Latitude', format="%f", help="Masukkan koordinat latitude")
+    longitude = st.number_input('Longitude', format="%f", help="Masukkan koordinat longitude")
+    pin_code = st.number_input('Pin code', min_value=100000, max_value=999999, help="Masukkan kode pos Anda")
+    feedback = st.text_input('Feedback', '', help="Berikan umpan balik Anda")
 
-user_input = {
-    'Age': age,
-    'Gender': gender,
-    'Marital Status': marital_status,
-    'Occupation': occupation,
-    'Monthly Income': monthly_income,
-    'Educational Qualifications': educational_qualifications,
-    'Family size': family_size,
-    'latitude': latitude,
-    'longitude': longitude,
-    'Pin code': pin_code,
-    'Feedback': feedback
-}
+    submit_button = st.form_submit_button(label='Predict')
 
-if st.button('Predict'):
+if submit_button:
+    user_input = {
+        'Age': age,
+        'Gender': gender,
+        'Marital Status': marital_status,
+        'Occupation': occupation,
+        'Monthly Income': monthly_income,
+        'Educational Qualifications': educational_qualifications,
+        'Family size': family_size,
+        'latitude': latitude,
+        'longitude': longitude,
+        'Pin code': pin_code,
+        'Feedback': feedback
+    }
     user_input_processed = preprocess_input(user_input)
     try:
         prediction = model.predict(user_input_processed)
-        st.write(f'Prediction: {prediction[0]}')
+        with st.container():
+            st.write(f'**Prediction:** {prediction[0]}', unsafe_allow_html=True)
     except ValueError as e:
         st.error(f"Error in prediction: {e}")
 
