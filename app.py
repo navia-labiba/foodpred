@@ -124,7 +124,7 @@ with st.form(key='input_form'):
     latitude = st.number_input('Latitude', format="%f", help="Masukkan koordinat latitude")
     longitude = st.number_input('Longitude', format="%f", help="Masukkan koordinat longitude")
     pin_code = st.number_input('Pin code', min_value=100000, max_value=999999, help="Masukkan kode pos Anda")
-    feedback = st.text_input('Feedback', '', help="Berikan umpan balik Anda")
+    feedback = st.selectbox('Feedback', ['Negative', 'Positive'], help="Pilih umpan balik Anda")
 
     submit_button = st.form_submit_button(label='Predict')
 
@@ -145,8 +145,10 @@ if submit_button:
     user_input_processed = preprocess_input(user_input)
     try:
         prediction = model.predict(user_input_processed)
+        # Asumsikan model Anda memberikan label 0 untuk 'Negatif' dan 1 untuk 'Positif'
+        prediction_label = 'Positif' if prediction[0] == 1 else 'Negatif'
         with st.container():
-            st.write(f'**Prediction:** {prediction[0]}', unsafe_allow_html=True)
+            st.write(f'**Prediction:** {prediction_label}', unsafe_allow_html=True)
     except ValueError as e:
         st.error(f"Error in prediction: {e}")
 
